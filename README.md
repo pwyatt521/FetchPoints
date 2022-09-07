@@ -7,6 +7,9 @@ To download and setup go, use https://go.dev/doc/install
 To run the project, in the project folder in a terminal window, run the following:
 go run .
 
+To run the unit tests for the project, in the project folder in a terminal window, run the following:
+go test
+
 In a separate terminal, you can send requests to localhost port 8080. See below for more information on the available requests.
 
 To get the point balance for each payer, you can use the following GET request:
