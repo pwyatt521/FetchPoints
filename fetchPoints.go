@@ -41,16 +41,16 @@ const timeString = "2006-01-02T15:04:05Z07:00"
 // The transaction cannot have a negative points value
 // The transaction must have a correctly formatted timestamp
 // RETURN: True if the transaction is invalid, and false if the transaction is valid
-func isTransactionInvalid(newTransaction transaction) bool {
+func isTransactionInvalid(newTransaction transaction) string {
 	if newTransaction.Points <= 0 {
-		return true
+		return "You cannot have a 0 or negative amount of points for a transaction."
 	}
 	_,error := time.Parse(timeString,newTransaction.Timestamp)
 
 	if error != nil {
-		return true
+		return "Invalid timestamp format. The expected format is: "+timeString
 	}
-	return false
+	return ""
 }
 
 // Given a transaction, check if it already exists in the transaction list, and if it does not, add it to the transaction list

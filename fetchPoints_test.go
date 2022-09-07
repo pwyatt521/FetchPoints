@@ -1,4 +1,4 @@
-// holds the unit tests for the fetchPoints file
+// This file holds the unit tests for the fetchPoints file
 
 package main
 
@@ -9,23 +9,24 @@ import (
 
 // Test to make sure that invalid transactions are not allowed, and valid ones are allowed
 func TestIsTransactionInvalid(t *testing.T) {
-	testTransaction1 := transaction {"Payer1", 300,  "2020-11-02T14:00:00Z"}
- 	testTransaction2 := transaction {"Payer2", -300,  "2020-11-02T14:00:00Z"}
- 	testTransaction3 := transaction {"Payer2", 300,  "2020 Nov 02 14:00:00Z"}
+	testTransaction1 := transaction {"Payer1", 300,  "2020-11-02T14:00:00Z"} // Valid transaction
+ 	testTransaction2 := transaction {"Payer2", -300,  "2020-11-02T14:00:00Z"} // Invalid number of points
+ 	testTransaction3 := transaction {"Payer2", 300,  "2020 Nov 02 14:00:00Z"}  // Invalid date format
 
-	if isTransactionInvalid(testTransaction1) {
-		t.Fatalf("testTransaction1 is valid, but isTransactionInvalid returns true.")
+	if isTransactionInvalid(testTransaction1) != "" {
+		t.Fatalf("testTransaction1 is valid, but isTransactionInvalid returns an error message.")
 	}
-	if !isTransactionInvalid(testTransaction2) {
-		t.Fatalf("testTransaction2 is invalid, but isTransactionInvalid returns false.")
+	if isTransactionInvalid(testTransaction2) == "" {
+		t.Fatalf("testTransaction2 is invalid, but isTransactionInvalid does not return an error.")
 	}
-	if !isTransactionInvalid(testTransaction3) {
-		t.Fatalf("testTransaction3 is invalid, but isTransactionInvalid returns false.")
+	if isTransactionInvalid(testTransaction3) == "" {
+		t.Fatalf("testTransaction3 is invalid, but isTransactionInvalid does not return an error.")
 	}
 }
 
 // Test addTransaction and updateTotals to make sure everything is sorted correctly
 // Then spend some points and make sure the correct transactions are subtracted from
+// The tag is large to easily test a growing transaction list and correctly interact with it multiple times
 func TestAddTransaction(t *testing.T) {
 	testTransaction1 := transaction {"Payer1", 300,  "2020-11-02T14:00:00Z"}
 	testTransaction2 := transaction {"Payer2", 100,  "2019-11-02T14:00:00Z"}
@@ -61,7 +62,7 @@ func TestAddTransaction(t *testing.T) {
 	addTransaction(testTransaction4)
 	addTransaction(testTransaction5)
 
-	// test balance is correct
+	// Test balance is correct
 	if balance["Payer1"].Points != 400 {
 		t.Fatalf("Payer1 should have 400 points, but instead has a value of " + strconv.Itoa(balance["Payer1"].Points))
 	}
@@ -97,7 +98,7 @@ func TestAddTransaction(t *testing.T) {
 		t.Fatalf("Payer1 points should have been -400, but was actually "+ strconv.Itoa(spentPoints["Payer1"].Points))
 	}
 
-	// test corner case of binary search where two transactions have the same timestamp and points, but different payers
+	// Test corner case of binary search where two transactions have the same timestamp and points, but different payers
 	if !addTransaction(testTransaction2) {
 		t.Fatalf("Payer2 should be added even though it has the same timestamp and points as Payer 3")
 	}
@@ -106,7 +107,7 @@ func TestAddTransaction(t *testing.T) {
 	addTransaction(testTransaction7)
 	addTransaction(testTransaction8)
 
-	// test that the points are not spent twice, but that partially spent transactions are still correctly spent
+	// Test that the points are not spent twice, but that partially spent transactions are still correctly spent
 	spentPoints= nil
 	spentPoints = trySpendPoints(1000)
 	if spentPoints["Payer2"].Points!=-600 {

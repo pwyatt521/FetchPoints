@@ -43,14 +43,14 @@ func postTransaction(c *gin.Context) {
 		c.IndentedJSON(http.StatusExpectationFailed, gin.H{"message": "Incorrect transaction format."})
 		return
 	}
-
-	if isTransactionInvalid(newTransaction){
-		c.IndentedJSON(http.StatusExpectationFailed, gin.H{"message": "Transactions cannot have a negative point value."})
+	errMessage :=isTransactionInvalid(newTransaction)
+	if errMessage != "" {
+		c.IndentedJSON(http.StatusExpectationFailed, gin.H{"message": errMessage})
 
 	} else if addTransaction(newTransaction){
 		c.IndentedJSON(http.StatusCreated, newTransaction)
 	} else {
-		c.IndentedJSON(http.StatusExpectationFailed, gin.H{"message": "Transaction duplicates not allowed."})
+		c.IndentedJSON(http.StatusExpectationFailed, gin.H{"message": "Transaction duplicates are not allowed."})
 	}
 }
 
