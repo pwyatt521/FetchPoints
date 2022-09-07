@@ -4,6 +4,9 @@ Fetch Rewards Coding Exercise - Backend Software Engineering
 I wrote my project in go.  This is my first time writing in go, so I had to set it up on my compueter.
 To download and setup go, use https://go.dev/doc/install
 
+You may also need to tell go to use the following project, which is going to handle the listening and API requests:
+go get -u github.com/gin-gonic/gin
+
 To run the project, in the project folder in a terminal window, run the following:
 go run .
 
