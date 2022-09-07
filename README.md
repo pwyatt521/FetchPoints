@@ -16,7 +16,7 @@ To post a new transaction, you can use the following POST request format:
 curl http://localhost:8080/transaction --inclue --header "Content-Type: application/json" --request "POST" --data '{"payer":"Payer3", "points":100,  "timestamp":"2019-01-02T14:00:00Z"}'
 
 NOTE: I added some input validation for adding transactions.
-- The points cannot be negative when adding a transaction. I made this decision for the following reasons:
+- The points cannot be 0 or negative when adding a transaction. I made this decision for the following reasons:
 	* While using fetch, I have never been punished points for adding a transaction and I could not think of a reason to do so, as it would punish users for uploading a transaction.  This would disincentivizing the user from using the app.
 	* Allowing negative values in specific transactions but not the payer balances would require looping over all transactions each time a transaction is added for a payer with a 0 balance to correct for negative values.  
 - The timestamp must follow the expected format of "2006-01-02T15:04:05Z07:00".  This is the format that best matches the examples given in the instructions, and allows for copy and pasting the json objects from the instructions to help create transactions. 
